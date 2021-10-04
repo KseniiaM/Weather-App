@@ -21,7 +21,7 @@ class _LocationViewState extends State<LocationView> {
             ),
           ),
           Text(
-            'Svyatoshino',
+            weatherViewModel.cityName,
             style: Theme.of(context).textTheme.headline6,
           )
         ]),

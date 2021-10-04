@@ -37,6 +37,7 @@ class _State extends State<HomeView> {
 
   @override
   void initState() {
+    super.initState();
     Provider.of<WeatherViewModel>(context, listen: false).getLatestWeather();
   }
 }

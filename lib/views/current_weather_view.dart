@@ -57,7 +57,7 @@ class _CurrentWeatherViewState extends State<CurrentWeatherView> {
 
   String _getCurrentWeatherDescription(WeatherViewModel weatherViewModel) {
     return weatherViewModel.currentWeather == null
-        ? "Loading data"
+        ? 'Loading data'
         : weatherViewModel.currentWeather?.weatherDescription ?? '';
   }
 }
