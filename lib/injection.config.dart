@@ -20,7 +20,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
     {String? environment, _i2.EnvironmentFilter? environmentFilter}) {
   final gh = _i2.GetItHelper(get, environment, environmentFilter);
   gh.factory<_i3.ILocationService>(() => _i4.LocationService());
-  gh.factory<_i5.IWeatherService>(() => _i6.WeatherService());
+  gh.factory<_i5.IWeatherService>(
+      () => _i6.WeatherService(get<_i3.ILocationService>()));
   gh.factory<_i7.WeatherViewModel>(() => _i7.WeatherViewModel(
       get<_i5.IWeatherService>(), get<_i3.ILocationService>()));
   return get;

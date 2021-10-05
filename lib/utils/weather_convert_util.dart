@@ -1,16 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
-import 'package:weather/weather.dart';
+import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_icons/weather_icons.dart';
 
-extension WeatherExtensions on Weather {
+extension WeatherExtensions on WeatherModel {
 
   IconData convertWeatherStateToIcon() {
-    if (weatherMain == null) {
-      return WeatherIcons.day_sunny_overcast;
-    }
 
-    switch (weatherMain) {
+    switch (weatherDescription) {
       case 'Thunderstorm':
         return WeatherIcons.thunderstorm;
       case 'Rain':
@@ -29,14 +26,11 @@ extension WeatherExtensions on Weather {
   }
 
   String getWeatherDateFormatted() {
-    return DateFormat('E, h a').format(date ?? DateTime.now());
+    return DateFormat('E, h a').format(time);
   }
 
   String getWeatherDegreesFormatted() {
-    final temperatureFixed = temperature?.celsius?.toStringAsFixed(1);
-    if (temperatureFixed == null) {
-      return '';
-    }
+    final temperatureFixed = temperature.toStringAsFixed(1);
 
     return '$temperatureFixed \u00B0';
   }

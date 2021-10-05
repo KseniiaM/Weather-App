@@ -19,7 +19,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Weather App',
-      theme: ThemeData.dark(),
+      themeMode: Provider.of<WeatherViewModel>(context).themeMode,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
       home: HomeView(),
       debugShowCheckedModeBanner: false,
     );

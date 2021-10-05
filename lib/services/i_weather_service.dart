@@ -1,6 +1,7 @@
-import 'package:weather/weather.dart';
+import 'package:location/location.dart';
+import 'package:weather_app/models/weather_model.dart';
 
 abstract class IWeatherService {
-  Future<Weather> getCurrentWeather(double latitude, double longitude);
-  Future<List<Weather>> getFiveDayWeatherForecast(double latitude, double longitude);
+  Future<WeatherModel> getCurrentWeather(LocationData locationData);
+  Future<List<WeatherModel>> getFiveDayWeatherForecast(LocationData locationData);
 }

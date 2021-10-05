@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/viewmodels/weather_viewmodel.dart';
 import 'package:weather_app/views/current_weather_view.dart';
@@ -20,9 +21,14 @@ class _State extends State<HomeView> {
   Widget build(BuildContext context) {
     return Consumer<WeatherViewModel>(
         builder: (context, weatherViewModel, child) => Scaffold(
-            appBar: AppBar(title: Text('Weather App')),
+            appBar: AppBar(title: Text('Weather App'),
+            actions: [
+              Switch.adaptive(value: weatherViewModel.isDarkTheme, onChanged: (value) {
+                weatherViewModel.isDarkTheme = !weatherViewModel.isDarkTheme;
+              })
+              ],),
             body: weatherViewModel.currentWeather == null
-                ? CircularProgressIndicator()
+                ? Center(child: CircularProgressIndicator())
                 : RefreshIndicator(
                     onRefresh: () =>
                         getWeatherPressed(weatherViewModel, context),
@@ -38,6 +44,9 @@ class _State extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    Provider.of<WeatherViewModel>(context, listen: false).getLatestWeather();
+    final viewModel = Provider.of<WeatherViewModel>(context, listen: false);
+    viewModel.getLatestWeather();
+    var brightness = SchedulerBinding.instance!.window.platformBrightness;
+    viewModel.isDarkTheme = brightness == Brightness.dark;
   }
 }
