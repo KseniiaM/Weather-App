@@ -21,15 +21,38 @@ class _State extends State<HomeView> {
   Widget build(BuildContext context) {
     return Consumer<WeatherViewModel>(
         builder: (context, weatherViewModel, child) => Scaffold(
-            appBar: AppBar(title: Text('Weather App'),
-            actions: [
-              Switch.adaptive(value: weatherViewModel.isDarkTheme, onChanged: (value) {
-                weatherViewModel.isDarkTheme = !weatherViewModel.isDarkTheme;
-              })
-              ],),
-            body: weatherViewModel.currentWeather == null
-                ? Center(child: CircularProgressIndicator())
-                : RefreshIndicator(
+            appBar: AppBar(
+              title: Text('Weather App'),
+              actions: [
+                Switch.adaptive(
+                    value: weatherViewModel.isDarkTheme,
+                    onChanged: (value) {
+                      weatherViewModel.isDarkTheme =
+                          !weatherViewModel.isDarkTheme;
+                    })
+              ],
+            ),
+            body: (() {
+              if (weatherViewModel.isWeatherLoadingFailed) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                          'Cannot load data, please check your network and GPS'),
+                      ElevatedButton(
+                          onPressed: () {
+                            weatherViewModel.getLatestWeather();
+                          },
+                          child: Text('Try again'))
+                    ],
+                  ),
+                );
+              } else if (weatherViewModel.currentWeather == null) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                return RefreshIndicator(
                     onRefresh: () =>
                         getWeatherPressed(weatherViewModel, context),
                     child: Card(
@@ -38,7 +61,9 @@ class _State extends State<HomeView> {
                           LocationView(),
                           CurrentWeatherView(),
                           WeatherForDaysList(),
-                        ])))));
+                        ])));
+              }
+            }())));
   }
 
   @override

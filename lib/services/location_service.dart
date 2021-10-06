@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:injectable/injectable.dart';
 import 'package:weather_app/services/i_location_service.dart';
 import 'package:location/location.dart';
@@ -8,11 +9,15 @@ class LocationService implements ILocationService {
 
   @override
   Future<LocationData?> getCurrentLocation() async {
+
+    if (!await _hasNetwork()) {
+      return null;
+    }
+
     final location = Location();
 
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
-    await location.changeSettings(accuracy: LocationAccuracy.low);
 
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
@@ -30,6 +35,7 @@ class LocationService implements ILocationService {
       }
     }
 
+    await location.changeSettings(accuracy: LocationAccuracy.low);
     return await location.getLocation();
   }
 
@@ -37,5 +43,13 @@ class LocationService implements ILocationService {
   Future<String?> getCityNameFromCoordinates(LocationData locationData) async {
     final placemarks = await geo.placemarkFromCoordinates(locationData.latitude!, locationData.longitude!);
     return placemarks[0].locality;
+  }
+
+  Future<bool> _hasNetwork() async {
+    final _connectivity = Connectivity();
+    var connectivityResult = await _connectivity.checkConnectivity();
+
+    return connectivityResult == ConnectivityResult.mobile
+    || connectivityResult == ConnectivityResult.wifi;
   }
 }
